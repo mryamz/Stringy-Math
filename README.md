@@ -1,18 +1,16 @@
 # Stringy-Math
 A math library for Java that reseambles Java's StringBuilder but allows for mathmatical computations at unimited precision.
 
-## TODO:
+### TODO:
 - Add methods for use of multiplication and division.
 - Add sqrt functionality
 - Documentation
 - Testing
 - Optimization
 
-### Limitations:
-- Only adding and subtracting works.
-- No documentation :(
-- No unit testing
-- Not nearly optimized
+### Features
+- Addition and Subtraction of Strings
+- Logical Evaluations Equivalent to a > b **example** logic(a, b) may return true, equal, or false
 
 #### How to Use:
 ```
