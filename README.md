@@ -20,7 +20,7 @@ import arithmetic.numbers.DynamicNumber;
 
 public class Main {
 	public static void main(String... strings) {
-    // Friendly Builder Style Pattern
+		// Friendly Builder Style Pattern
 		new DynamicNumber("53656.15452").subtract("-9.45587000000512").add("358.2").subtract("-8.1").println();
 	}
 }
