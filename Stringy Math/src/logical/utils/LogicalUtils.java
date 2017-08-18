@@ -1,6 +1,5 @@
 package logical.utils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import arithmetic.numbers.DynamicNumber;
@@ -471,5 +470,4 @@ public class LogicalUtils {
 
 		return value;
 	}
-
 }
