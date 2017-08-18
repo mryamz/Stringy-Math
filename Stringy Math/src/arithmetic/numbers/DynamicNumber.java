@@ -16,7 +16,10 @@ public final class DynamicNumber {
 	private int origin;
 	
 	public DynamicNumber(DynamicNumber number) {
-		this(number.getNumber());
+		this.number = new ArrayList<>(number.getNumber());
+		this.sizeLeftOfPoint = number.sizeLeftOfPoint;
+		this.sizeRightOfPoint = number.sizeRightOfPoint;
+		calculateSizes();
 	}
 
 	public DynamicNumber(String value) {
@@ -24,17 +27,11 @@ public final class DynamicNumber {
 			number.add(value.charAt(i));
 		}
 		calculateSizes();
-		if (number.contains('.') && sizeRightOfPoint == 0) {
-			number.remove(number.size() - 1);
-		}
 	}
 	
 	public DynamicNumber(List<Character> number) {
 		this.number = number;
 		calculateSizes();
-		if (number.contains('.') && sizeRightOfPoint == 0) {
-			number.remove(number.size() - 1);
-		}
 	}
 
 	private void calculateSizes() {
@@ -53,6 +50,10 @@ public final class DynamicNumber {
 			sizeRightOfPoint = 0;
 			sizeLeftOfPoint = number.size();
 			origin = number.size() - 1;
+		}
+		
+		if (number.contains('.') && sizeRightOfPoint == 0) {
+			number.remove(number.size() - 1);
 		}
 	}
 

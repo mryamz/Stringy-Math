@@ -436,7 +436,7 @@ public class AddUtils {
 		List<Character> numberA = lists[0];
 		List<Character> numberB = lists[1];
 		List<Character> carryOver = lists[2];
-
+		
 		// -x + -y or -(x+y)
 		if (numberA.contains('-') && numberB.contains('-')) {
 			numberA.remove(0);
