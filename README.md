@@ -42,3 +42,17 @@ public class Main {
 	}
 }
 ```
+#### Console Output:
+```
+Value=1
+Value=2
+Value=3
+Value=4
+Value=5
+Value=6
+Value=7
+Value=8
+Value=9
+Value=10
+Value=54031.895390000004710990
+```
