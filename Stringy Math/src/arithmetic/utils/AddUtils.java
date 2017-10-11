@@ -5,9 +5,9 @@ import java.util.List;
 
 import arithmetic.numbers.DynamicNumber;
 
-public class AddUtils {
+public final class AddUtils {
 
-	private static String add(char a, char b) {
+	protected static String add(char a, char b) {
 		String value = "NULL";
 
 		// a @ 0
