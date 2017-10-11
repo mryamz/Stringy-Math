@@ -34,7 +34,7 @@ public final class DynamicNumber {
 		calculateSizes();
 	}
 
-	private void calculateSizes() {
+	public void calculateSizes() {
 		sizeRightOfPoint = 0;
 		sizeLeftOfPoint = 0;
 		if (number.contains('.')) {

@@ -1,12 +1,13 @@
 package arithmetic.utils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import arithmetic.numbers.DynamicNumber;
+import logical.utils.LogicalUtils;
 
 public class MultiplicationUtils {
-	
+
+	@SuppressWarnings("unused")
 	private static String times(char a, char b) {
 		String value = "NULL";
 
@@ -426,28 +427,59 @@ public class MultiplicationUtils {
 
 		return value;
 	}
-	
-	
-	public static List<Character> multiply(DynamicNumber dna, DynamicNumber dnb) {
-		List<Character>[] lists = ArithmeticUtils.generateTargetSizes(dna, dnb);
 
-		List<Character> solution = new ArrayList<>();
-		List<Character> numberA = lists[0];
-		List<Character> numberB = lists[1];
-		List<Character> carryOver = lists[2];
-		
-		int decimalIndex = carryOver.indexOf('.');
-		int size = carryOver.size();
-		for (int i = 0; i < size; i++) {
-			if (i == decimalIndex)
-				continue;
-			
-			char a = numberA.get(i);
-			char b = numberB.get(i);
-			String result = times(a, b);
-			System.out.println(result);
+	public static List<Character> multiply(DynamicNumber dna, DynamicNumber dnb) {
+		DynamicNumber solution = new DynamicNumber("0");
+
+		if (dna.getNumber().contains('.') || dnb.getNumber().contains('.')) {
+			while (dna.getNumber().get(0) == Character.valueOf('0')) {
+				dna.getNumber().remove(Character.valueOf('0'));
+			}
+			while (dnb.getNumber().get(0) == Character.valueOf('0')) {
+				dnb.getNumber().remove(Character.valueOf('0'));
+			}
+
+			dna.println();
+			dnb.println();
+
+			dnb.calculateSizes();
+			dna.calculateSizes();
+
+			int dnaDecimalIndex = dna.getSizeRightOfPoint();
+			int dnbDecimalIndex = dnb.getSizeRightOfPoint();
+
+			dna.getNumber().remove(Character.valueOf('.'));
+			dnb.getNumber().remove(Character.valueOf('.'));
+
+			solution = timesInts(dna, dnb);
+
+			solution.println();
+
+			int indexOfDecimal = dnaDecimalIndex + dnbDecimalIndex;
+			if (solution.getNumber().size() >= indexOfDecimal) {
+				solution.getNumber().add(indexOfDecimal, Character.valueOf('.'));
+			} else {
+				for (int i = 0; i < indexOfDecimal - solution.getNumber().size(); i++) {
+					solution.getNumber().add(0, Character.valueOf('0'));
+				}
+				solution.getNumber().add(0, Character.valueOf('.'));
+				solution.getNumber().add(0, Character.valueOf('0'));
+			}
+
+		} else {
+			solution = timesInts(dna, dnb);
 		}
-		
+
+		return solution.getNumber();
+	}
+
+	private static DynamicNumber timesInts(DynamicNumber dna, DynamicNumber dnb) {
+		DynamicNumber solution = new DynamicNumber("0");
+
+		for (DynamicNumber i = new DynamicNumber("0"); LogicalUtils.getLogicalStatus(dnb, i) == "true"; i.add("1")) {
+			solution.add(dna);
+		}
+
 		return solution;
 	}
 
