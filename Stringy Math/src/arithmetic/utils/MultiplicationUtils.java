@@ -8,6 +8,10 @@ import logical.utils.LogicalUtils;
 public class MultiplicationUtils {
 
 	@SuppressWarnings("unused")
+	/**
+	 * 
+	 * This is unused! But, I'm not deleting it because it a long time to type :) #WORK #MAXEFFORT
+	 */
 	private static String times(char a, char b) {
 		String value = "NULL";
 
@@ -439,9 +443,6 @@ public class MultiplicationUtils {
 				dnb.getNumber().remove(Character.valueOf('0'));
 			}
 
-			dna.println();
-			dnb.println();
-
 			dnb.calculateSizes();
 			dna.calculateSizes();
 
@@ -452,8 +453,6 @@ public class MultiplicationUtils {
 			dnb.getNumber().remove(Character.valueOf('.'));
 
 			solution = timesInts(dna, dnb);
-
-			solution.println();
 
 			int indexOfDecimal = dnaDecimalIndex + dnbDecimalIndex;
 			if (solution.getNumber().size() >= indexOfDecimal) {
