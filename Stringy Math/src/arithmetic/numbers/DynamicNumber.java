@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import arithmetic.utils.AddUtils;
+import arithmetic.utils.DivideUtils;
 import arithmetic.utils.MultiplicationUtils;
 import arithmetic.utils.SubtractUtils;
 
@@ -14,7 +15,7 @@ public final class DynamicNumber {
 	private int sizeRightOfPoint;
 	private int sizeLeftOfPoint;
 	private int origin;
-	
+
 	public DynamicNumber(DynamicNumber number) {
 		this.number = new ArrayList<>(number.getNumber());
 		this.sizeLeftOfPoint = number.sizeLeftOfPoint;
@@ -28,7 +29,7 @@ public final class DynamicNumber {
 		}
 		calculateSizes();
 	}
-	
+
 	public DynamicNumber(List<Character> number) {
 		this.number = number;
 		calculateSizes();
@@ -51,7 +52,7 @@ public final class DynamicNumber {
 			sizeLeftOfPoint = number.size();
 			origin = number.size() - 1;
 		}
-		
+
 		if (number.contains('.') && sizeRightOfPoint == 0) {
 			number.remove(number.size() - 1);
 		}
@@ -62,27 +63,45 @@ public final class DynamicNumber {
 		calculateSizes();
 		return this;
 	}
-	
+
 	public DynamicNumber add(DynamicNumber value) {
 		number = AddUtils.add(this, new DynamicNumber(value), '\0');
 		calculateSizes();
 		return this;
 	}
-	
+
 	public DynamicNumber add(List<Character> value) {
 		number = AddUtils.add(this, new DynamicNumber(value), '\0');
 		calculateSizes();
 		return this;
 	}
-	
+
 	public DynamicNumber subtract(String value) {
 		number = SubtractUtils.subtract(this, new DynamicNumber(value), '\0');
 		calculateSizes();
 		return this;
 	}
-	
+
+	public DynamicNumber subtract(DynamicNumber value) {
+		number = SubtractUtils.subtract(this, new DynamicNumber(value), '\0');
+		calculateSizes();
+		return this;
+	}
+
 	public DynamicNumber multiply(String value) {
 		number = MultiplicationUtils.multiply(this, new DynamicNumber(value));
+		calculateSizes();
+		return this;
+	}
+
+	public DynamicNumber multiply(DynamicNumber value) {
+		number = MultiplicationUtils.multiply(this, new DynamicNumber(value));
+		calculateSizes();
+		return this;
+	}
+
+	public DynamicNumber divide(String value) {
+		number = DivideUtils.divide(this, new DynamicNumber(value));
 		calculateSizes();
 		return this;
 	}
@@ -99,9 +118,13 @@ public final class DynamicNumber {
 		}
 		return sb.toString();
 	}
-	
-	public void println() {
-		System.out.println("Value=" + toString());
+
+	public void println(Object... optional_tag) {
+		String names = "";
+		for (Object object : optional_tag) {
+			names += "TAG:" + object.toString();
+		}
+		System.out.println(names.isEmpty() ? "Value=" + toString() : "Value of " + names + " = " + toString());
 	}
 
 	public int getSizeLeftOfPoint() {
