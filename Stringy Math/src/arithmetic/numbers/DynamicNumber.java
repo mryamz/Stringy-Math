@@ -9,6 +9,8 @@ import arithmetic.utils.MultiplicationUtils;
 import arithmetic.utils.SubtractUtils;
 
 public final class DynamicNumber {
+	
+	public static final DynamicNumber ZERO = new DynamicNumber("0");
 
 	private List<Character> number = new ArrayList<>();
 
@@ -101,7 +103,7 @@ public final class DynamicNumber {
 	}
 
 	public DynamicNumber divide(String value) {
-		number = DivideUtils.divide(this, new DynamicNumber(value));
+		number = DivideUtils.divide(this, new DynamicNumber(value), 0, new StringBuilder());
 		calculateSizes();
 		return this;
 	}
@@ -137,5 +139,10 @@ public final class DynamicNumber {
 
 	public int getSizeRightOfPoint() {
 		return sizeRightOfPoint;
+	}
+	
+	public void placeDecimalPointAt(int index) {
+		getNumber().remove(Character.valueOf('.'));
+		getNumber().add(index, '.');
 	}
 }
