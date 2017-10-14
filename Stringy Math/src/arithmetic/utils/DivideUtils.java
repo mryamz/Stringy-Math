@@ -7,12 +7,18 @@ import logical.utils.LogicalUtils;
 
 public class DivideUtils {
 
-	private static int decimalPointsMovedDividend;
+	private static int decimalPointsMoved;
 
-	public static List<Character> divide(DynamicNumber dividend, DynamicNumber divisor, int iterations, StringBuilder solution) {
+	public static List<Character> divide(DynamicNumber dividend, DynamicNumber divisor, DynamicNumber iterations, StringBuilder solution) {
 
-		if (iterations == 0) {
-			decimalPointsMovedDividend = divisor.getSizeRightOfPoint() == 0 ? 1 : divisor.getSizeRightOfPoint();
+		if (LogicalUtils.getLogicalStatus(iterations, DynamicNumber.ZERO) == "equal") {
+			
+			if(LogicalUtils.getLogicalStatus(divisor, dividend) == "true") {
+				decimalPointsMoved = dividend.getSizeRightOfPoint() == 0 ? dividend.getNumber().size() : dividend.getSizeRightOfPoint();
+			} else {
+				decimalPointsMoved = divisor.getSizeRightOfPoint() == 0 ? divisor.getNumber().size() : divisor.getSizeRightOfPoint();
+			}
+			
 		}
 		dividend.getNumber().remove(Character.valueOf('.'));
 		divisor.getNumber().remove(Character.valueOf('.'));
@@ -26,22 +32,17 @@ public class DivideUtils {
 
 		DynamicNumber intermittenStep = dividend_copy.subtract(divisor_copy.multiply(quotient));
 
-		divisor.println(iterations);
-		dividend.println(iterations);
-		quotient.println(iterations);
-		intermittenStep.println(iterations);
-
 		for (char c : quotient.getNumber()) {
 			solution.append(c);
 		}
 
-		if (iterations > 100 || LogicalUtils.getLogicalStatus(remainder, DynamicNumber.ZERO) == "equal") {
+		if (LogicalUtils.getLogicalStatus(remainder, DynamicNumber.ZERO) == "equal" || LogicalUtils.getLogicalStatus(iterations, DynamicNumber.ONE_HUNDRED) == "true") {
 			DynamicNumber sol = new DynamicNumber(solution.toString());
-			sol.placeDecimalPointAt(decimalPointsMovedDividend); 
+			sol.placeDecimalPointAt(decimalPointsMoved); 
 			return sol.getNumber();
 		} else {
 			intermittenStep.getNumber().add('0');
-			return divide(intermittenStep, divisor, ++iterations, solution);
+			return divide(intermittenStep, divisor, iterations.add("1"), solution);
 		}
 	}
 
