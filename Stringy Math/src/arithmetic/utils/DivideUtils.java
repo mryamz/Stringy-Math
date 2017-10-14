@@ -11,15 +11,10 @@ public class DivideUtils {
 
 	public static List<Character> divide(DynamicNumber dividend, DynamicNumber divisor, DynamicNumber iterations, StringBuilder solution) {
 
-		if (LogicalUtils.getLogicalStatus(iterations, DynamicNumber.ZERO) == "equal") {
-			
-			if(LogicalUtils.getLogicalStatus(divisor, dividend) == "true") {
-				decimalPointsMoved = dividend.getSizeRightOfPoint() == 0 ? dividend.getNumber().size() : dividend.getSizeRightOfPoint();
-			} else {
-				decimalPointsMoved = divisor.getSizeRightOfPoint() == 0 ? divisor.getNumber().size() : divisor.getSizeRightOfPoint();
-			}
-			
+		if (LogicalUtils.getLogicalStatus(iterations, new DynamicNumber("0")) == "equal") {
+			decimalPointsMoved = dividend.getSizeRightOfPoint() == 0 ? dividend.getNumber().size() : dividend.getSizeRightOfPoint();
 		}
+		
 		dividend.getNumber().remove(Character.valueOf('.'));
 		divisor.getNumber().remove(Character.valueOf('.'));
 
@@ -36,9 +31,10 @@ public class DivideUtils {
 			solution.append(c);
 		}
 
-		if (LogicalUtils.getLogicalStatus(remainder, DynamicNumber.ZERO) == "equal" || LogicalUtils.getLogicalStatus(iterations, DynamicNumber.ONE_HUNDRED) == "true") {
+		if (LogicalUtils.getLogicalStatus(remainder, new DynamicNumber("0")) == "equal" || LogicalUtils.getLogicalStatus(iterations, new DynamicNumber("1000")) == "true") {
 			DynamicNumber sol = new DynamicNumber(solution.toString());
-			sol.placeDecimalPointAt(decimalPointsMoved); 
+
+			sol.placeDecimalPointAt(decimalPointsMoved);
 			return sol.getNumber();
 		} else {
 			intermittenStep.getNumber().add('0');
