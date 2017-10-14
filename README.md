@@ -2,7 +2,7 @@
 A math library for Java that reseambles Java's StringBuilder but allows for mathmatical computations at unimited precision.
 
 ### TODO
-- Add methods for use of division.
+- Fix the placement for the decimal point after division computation.
 - Add sqrt functionality
 - Documentation
 - Testing
@@ -12,7 +12,7 @@ A math library for Java that reseambles Java's StringBuilder but allows for math
 - Addition, Subtraction, and Multiplication of Strings
 - Logical Evaluations Equivalent to a > b
   - **Example:**
-    - logic(a, b) may return true, equal, or false
+    - logic(a, b) may return the String true, equal, or false
 
 #### How to Use:
 ```
