@@ -7,14 +7,28 @@ import logical.utils.LogicalUtils;
 
 public class DivideUtils {
 
-	private static int decimalPointsMoved;
+	private static boolean isSigned;
 
 	public static List<Character> divide(DynamicNumber dividend, DynamicNumber divisor, DynamicNumber iterations, StringBuilder solution) {
 
 		if (LogicalUtils.getLogicalStatus(iterations, new DynamicNumber("0")) == "equal") {
-			decimalPointsMoved = dividend.getSizeRightOfPoint() == 0 ? dividend.getNumber().size() : dividend.getSizeRightOfPoint();
+			isSigned = false;
+
+			if (dividend.getNumber().contains('-') && divisor.getNumber().contains('-')) {
+				isSigned = false;
+			}
+
+			if (dividend.getNumber().contains('-') && !divisor.getNumber().contains('-')) {
+				isSigned = true;
+			}
+
+			if (!dividend.getNumber().contains('-') && divisor.getNumber().contains('-')) {
+				isSigned = true;
+			}
 		}
-		
+
+		dividend.getNumber().remove(Character.valueOf('-'));
+		divisor.getNumber().remove(Character.valueOf('-'));
 		dividend.getNumber().remove(Character.valueOf('.'));
 		divisor.getNumber().remove(Character.valueOf('.'));
 
@@ -33,8 +47,9 @@ public class DivideUtils {
 
 		if (LogicalUtils.getLogicalStatus(remainder, new DynamicNumber("0")) == "equal" || LogicalUtils.getLogicalStatus(iterations, new DynamicNumber("1000")) == "true") {
 			DynamicNumber sol = new DynamicNumber(solution.toString());
-
-			sol.placeDecimalPointAt(decimalPointsMoved);
+			if (isSigned) {
+				sol.getNumber().add(0, '-');
+			}
 			return sol.getNumber();
 		} else {
 			intermittenStep.getNumber().add('0');

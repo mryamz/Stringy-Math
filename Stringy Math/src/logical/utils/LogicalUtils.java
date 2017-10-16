@@ -429,6 +429,7 @@ public class LogicalUtils {
 
 		if (value == "NULL") {
 			System.err.println("Cannot Perform Operation with: a='" + a + "', b='" + b + "'\nThe expression \"" + a + " < or == " + b + "\" cannot be performed.\n");
+			throw new IllegalArgumentException();
 		}
 
 		return value;
