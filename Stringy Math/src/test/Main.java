@@ -4,7 +4,8 @@ import arithmetic.numbers.DynamicNumber;
 
 public class Main {
 	public static void main(String... strings) {
-		DynamicNumber number = new DynamicNumber("50");
-		number.divide("10").println("Final Answer");
+		DynamicNumber number = new DynamicNumber("-1111").divide("1000");
+		number.formatNumber();
+		number.println();
 	}
 }

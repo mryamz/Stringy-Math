@@ -10,7 +10,8 @@ public class MultiplicationUtils {
 	@SuppressWarnings("unused")
 	/**
 	 * 
-	 * This is unused! But, I'm not deleting it because it a long time to type :) #WORK #MAXEFFORT
+	 * This is unused! But, I'm not deleting it because it a long time to type
+	 * :) #WORK #MAXEFFORT
 	 */
 	private static String times(char a, char b) {
 		String value = "NULL";
@@ -435,38 +436,29 @@ public class MultiplicationUtils {
 	public static List<Character> multiply(DynamicNumber dna, DynamicNumber dnb) {
 		DynamicNumber solution = new DynamicNumber("0");
 
-		if (dna.getNumber().contains('.') || dnb.getNumber().contains('.')) {
-			while (dna.getNumber().get(0) == Character.valueOf('0')) {
-				dna.getNumber().remove(Character.valueOf('0'));
-			}
-			while (dnb.getNumber().get(0) == Character.valueOf('0')) {
-				dnb.getNumber().remove(Character.valueOf('0'));
-			}
+		boolean isSigned = false;
 
-			dnb.calculateSizes();
-			dna.calculateSizes();
+		if (dna.getNumber().contains('-') && dnb.getNumber().contains('-')) {
+			isSigned = false;
+		}
 
-			int dnaDecimalIndex = dna.getSizeRightOfPoint();
-			int dnbDecimalIndex = dnb.getSizeRightOfPoint();
+		if (dna.getNumber().contains('-') && !dnb.getNumber().contains('-')) {
+			isSigned = true;
+		}
 
-			dna.getNumber().remove(Character.valueOf('.'));
-			dnb.getNumber().remove(Character.valueOf('.'));
+		if (!dna.getNumber().contains('-') && dnb.getNumber().contains('-')) {
+			isSigned = true;
+		}
 
-			solution = timesInts(dna, dnb);
-
-			int indexOfDecimal = dnaDecimalIndex + dnbDecimalIndex;
-			if (solution.getNumber().size() >= indexOfDecimal) {
-				solution.getNumber().add(indexOfDecimal, Character.valueOf('.'));
-			} else {
-				for (int i = 0; i < indexOfDecimal - solution.getNumber().size(); i++) {
-					solution.getNumber().add(0, Character.valueOf('0'));
-				}
-				solution.getNumber().add(0, Character.valueOf('.'));
-				solution.getNumber().add(0, Character.valueOf('0'));
-			}
-
-		} else {
-			solution = timesInts(dna, dnb);
+		dna.getNumber().remove(Character.valueOf('-'));
+		dnb.getNumber().remove(Character.valueOf('-'));
+		dna.getNumber().remove(Character.valueOf('.'));
+		dnb.getNumber().remove(Character.valueOf('.'));
+		
+		solution = timesInts(dna, dnb);
+		
+		if(isSigned) {
+			solution.getNumber().add(0, '-');
 		}
 
 		return solution.getNumber();
