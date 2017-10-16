@@ -435,7 +435,10 @@ public class MultiplicationUtils {
 
 	public static List<Character> multiply(DynamicNumber dna, DynamicNumber dnb) {
 		DynamicNumber solution = new DynamicNumber("0");
-
+		dna.formatNumber();
+		dnb.formatNumber();
+		int rightOfDecimal = dna.getSizeRightOfPoint() + dnb.getSizeRightOfPoint();
+		
 		boolean isSigned = false;
 
 		if (dna.getNumber().contains('-') && dnb.getNumber().contains('-')) {
@@ -454,10 +457,15 @@ public class MultiplicationUtils {
 		dnb.getNumber().remove(Character.valueOf('-'));
 		dna.getNumber().remove(Character.valueOf('.'));
 		dnb.getNumber().remove(Character.valueOf('.'));
-		
+
+
 		solution = timesInts(dna, dnb);
 		
-		if(isSigned) {
+		if (rightOfDecimal != 0) {
+			solution.getNumber().add(solution.getNumber().size() - rightOfDecimal, '.');
+		}
+		
+		if (isSigned) {
 			solution.getNumber().add(0, '-');
 		}
 
@@ -467,8 +475,8 @@ public class MultiplicationUtils {
 	private static DynamicNumber timesInts(DynamicNumber dna, DynamicNumber dnb) {
 		DynamicNumber solution = new DynamicNumber("0");
 
-		for (DynamicNumber i = new DynamicNumber("0"); LogicalUtils.getLogicalStatus(dnb, i) == "true"; i.add("1")) {
-			solution.add(dna);
+		for (DynamicNumber i = new DynamicNumber("0"); LogicalUtils.getLogicalStatus(dna, i) == "true"; i.add("1")) {
+			solution.add(dnb);
 		}
 
 		return solution;
