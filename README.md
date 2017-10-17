@@ -1,5 +1,5 @@
 # Stringy-Math
-A math library for Java that reseambles Java's StringBuilder but allows for mathmatical computations at unimited precision.
+A math library for Java that reseambles Java's StringBuilder but allows for mathmatical computations at unlimited precision.
 
 ### TODO
 - Fix the placement for the decimal point after multiplication, & division computation.
