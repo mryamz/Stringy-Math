@@ -1,17 +1,17 @@
 package arithmetic.utils;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import arithmetic.numbers.DynamicNumber;
-import logical.utils.LogicalUtils;
 
 public class MultiplicationUtils {
 
-	@SuppressWarnings("unused")
 	/**
 	 * 
-	 * This is unused! But, I'm not deleting it because it a long time to type
-	 * :) #WORK #MAXEFFORT
+	 * This is used! But, I'm glad I did not delete it because it a long time to
+	 * type :) #WORK #MAXEFFORT
 	 */
 	private static String times(char a, char b) {
 		String value = "NULL";
@@ -434,11 +434,11 @@ public class MultiplicationUtils {
 	}
 
 	public static List<Character> multiply(DynamicNumber dna, DynamicNumber dnb) {
-		DynamicNumber solution = new DynamicNumber("0");
 		dna.formatNumber();
 		dnb.formatNumber();
-		int rightOfDecimal = dna.getSizeRightOfPoint() + dnb.getSizeRightOfPoint();
 		
+		int decicount = dna.getSizeRightOfPoint() + dnb.getSizeRightOfPoint();
+
 		boolean isSigned = false;
 
 		if (dna.getNumber().contains('-') && dnb.getNumber().contains('-')) {
@@ -458,28 +458,185 @@ public class MultiplicationUtils {
 		dna.getNumber().remove(Character.valueOf('.'));
 		dnb.getNumber().remove(Character.valueOf('.'));
 
+		dna.formatNumber();
+		dnb.formatNumber();
 
-		solution = timesInts(dna, dnb);
+		/* solution start non-negative integers */
+
+		// 1.) build table start
+
+		boolean isDnaBigger = false;
+		if (dna.getNumber().size() > dnb.getNumber().size()) {
+			isDnaBigger = true;
+		}
+		int maxNumberSize = Math.max(dna.getNumber().size(), dnb.getNumber().size());
+		int minNumberSize = Math.min(dna.getNumber().size(), dnb.getNumber().size());
+
+		char[][] mathTable = new char[2][maxNumberSize];
+		int delta = isDnaBigger ? dna.getNumber().size() - dnb.getNumber().size() : dnb.getNumber().size() - dna.getNumber().size();
+		for (int i = 0; i < mathTable.length; i++) {
+			for (int j = 0; j < mathTable[i].length; j++) {
+				mathTable[i][j] = '$';
+			}
+		}
+		if (isDnaBigger) {
+			for (int i = 0; i < maxNumberSize; i++) {
+				mathTable[0][i] = dna.getNumber().get(i);
+			}
+			for (int i = delta; i < maxNumberSize; i++) {
+				mathTable[1][i] = dnb.getNumber().get(i - delta);
+
+			}
+		} else {
+			for (int i = 0; i < maxNumberSize; i++) {
+				mathTable[0][i] = dnb.getNumber().get(i);
+			}
+
+			for (int i = delta; i < maxNumberSize; i++) {
+				mathTable[1][i] = dna.getNumber().get(i - delta);
+			}
+		}
+
+		// 1.) build table | end
+
+		// 2.) pairing the right cyber-data | start
+
+		// creating a list of lists of character type
+		ArrayList<ArrayList<Character>> answerTable = new ArrayList<ArrayList<Character>>();
+
+		// used for properly pairing the multiplications from the smaller to the
+		// bigger
+		int offset = 0;
+
+		// used for pivoting between the proper values
+		for (int i = maxNumberSize - 1; i > -1; i--) {
+
+			// adds a new list for building the answers in accordance to offset.
+			// "Makin' 'em babies righ'?"-Tavi
+			if (i == maxNumberSize - 1) {
+				answerTable.add(new ArrayList<>());
+			}
+
+			// part of pair
+			char a = mathTable[0][i];
+			// part of pair
+			char b = mathTable[1][maxNumberSize - 1 - offset];
+
+			// product of the pairs
+			String product = times(a, b);
+
+			// allows us to grab the start and last elements from the array
+
+			// build an end row of the semi-built answer table and resetting the
+			// loop if offset isn't at termination length.
+			if (i == 0) {
+
+				// build an end col.
+				answerTable.get(offset).add(ArithmeticUtils.base90.get(product));
+
+				// go to next column in the smaller table.
+				offset++;
+
+				// resets loop
+				i = maxNumberSize;
+
+				// checks for termination
+				if (offset == minNumberSize) {
+					break;
+				}
+			} else {
+				// Only multiplying
+				// TODO: multiply then add
+
+				// Given, for first iteration:
+				// productArr = {3, 5}
+				// answerTable.get(0) = 5
+
+				answerTable.get(offset).add(ArithmeticUtils.base90.get(product));
+			}
+		}
+		// 2.) pairing the right cyber-data | end
+
+		// 3.) Converting base 90 into base 10 by implementing the carry-system
+		for (int i = 0; i < answerTable.size(); i++) {
+			String[] bloatedVals = new String[answerTable.get(i).size()];
+			for (int j = 0; j < answerTable.get(i).size(); j++) {
+				char val = answerTable.get(i).get(j);
+				String bloatedVal = ArithmeticUtils.base90_swapped.get(val);
+				bloatedVals[j] = bloatedVal;
+			}
+
+			for (int j = 0; j < bloatedVals.length; j++) {
+				if (j < bloatedVals.length - 1) {
+					if (bloatedVals[j].length() == 1) {
+						continue;
+					}
+
+					byte a = Byte.parseByte(Character.toString(bloatedVals[j].charAt(0)));
+					char b = bloatedVals[j].charAt(1);
+					byte c = Byte.parseByte(bloatedVals[j + 1]);
+
+					byte d = (byte) (a + c);
+
+					bloatedVals[j] = Character.toString(b);
+					bloatedVals[j + 1] = Byte.toString(d);
+
+				} else {
+					for (int k = 0; k < bloatedVals.length; k++) {
+						if (k < bloatedVals.length - 1) {
+							answerTable.get(i).set(k, bloatedVals[k].charAt(0));
+						} else {
+							answerTable.get(i).remove(k);
+							for (int m = bloatedVals[k].length() - 1; m > -1; m--) {
+								answerTable.get(i).add(bloatedVals[k].charAt(m));
+							}
+						}
+					}
+				}
+			}
+
+			for (int j = 0; j < i; j++) {
+				answerTable.get(i).add(0, '0');
+			}
+		}
 		
-		if (rightOfDecimal != 0) {
-			solution.getNumber().add(solution.getNumber().size() - rightOfDecimal, '.');
+
+		// 4.) add answer table
+		DynamicNumber sum = new DynamicNumber("0");
+		for (int i = 0; i < answerTable.size(); i++) {
+			Collections.reverse(answerTable.get(i));
+			DynamicNumber row = new DynamicNumber(answerTable.get(i));
+			sum.add(row);
+		}
+
+		/* solution end non-negative integers */
+		
+		if(decicount > 0) {
+			sum.getNumber().add(sum.getNumber().size() - decicount, '.');
 		}
 		
 		if (isSigned) {
-			solution.getNumber().add(0, '-');
+			sum.getNumber().add(0, '-');
 		}
 
-		return solution.getNumber();
-	}
-
-	private static DynamicNumber timesInts(DynamicNumber dna, DynamicNumber dnb) {
-		DynamicNumber solution = new DynamicNumber("0");
-
-		for (DynamicNumber i = new DynamicNumber("0"); LogicalUtils.getLogicalStatus(dna, i) == "true"; i.add("1")) {
-			solution.add(dnb);
+		System.out.println("_________________________");
+		/// ------------ PRINT TABLE ------------
+		for (int i = 0; i < mathTable.length; i++) {
+			for (int j = 0; j < mathTable[i].length; j++) {
+				System.out.print(mathTable[i][j] + "-");
+			}
+			System.out.println();
+		}
+		// ------------ PRINT TABLE ------------
+		System.out.println("_________________________");
+		for (int i = 0; i < answerTable.size(); i++) {
+			for (int j = answerTable.get(i).size() - 1; j > -1; j--) {
+				System.out.print(answerTable.get(i).get(j) + " ");
+			}
+			System.out.println();
 		}
 
-		return solution;
+		return sum.getNumber();
 	}
 
 }
