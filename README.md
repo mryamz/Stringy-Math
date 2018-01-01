@@ -1,5 +1,5 @@
 # Stringy-Math
-A math library for Java that reseambles Java's StringBuilder but allows for mathmatical computations at unlimited precision.
+A math library for Java that reseambles Java's StringBuilder but allows for mathmatical computations at unlimited precision. This library allows for computations with 2,147,483,647 significant figures.
 
 ### TODO
 - Redo current division algorithm
