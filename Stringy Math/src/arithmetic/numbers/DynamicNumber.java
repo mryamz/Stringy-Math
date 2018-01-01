@@ -142,18 +142,19 @@ public final class DynamicNumber {
 	public void formatNumber() {
 		calculateSizes();
 		if (getNumber().contains('.')) {
-			while(getNumber().get(getNumber().size() - 1) == '0') {
+			while (getNumber().get(getNumber().size() - 1) == '0') {
 				getNumber().remove(getNumber().size() - 1);
 			}
-			
-			if(getNumber().get(getNumber().size() - 1) == '.') {
+
+			if (getNumber().get(getNumber().size() - 1) == '.') {
 				getNumber().remove(getNumber().size() - 1);
 			}
 		}
-		
-		while(getNumber().get(0) == '0') {
-			getNumber().remove(0);
-		}
+
+		if (getNumber().size() > 1)
+			while (getNumber().get(0) == '0') {
+				getNumber().remove(0);
+			}
 		calculateSizes();
 	}
 
