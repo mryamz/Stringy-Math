@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import arithmetic.numbers.DynamicNumber;
+import general.utils.ScratchWork;
 
 public class MultiplicationUtils {
 
@@ -436,7 +437,7 @@ public class MultiplicationUtils {
 	public static List<Character> multiply(DynamicNumber dna, DynamicNumber dnb) {
 		dna.formatNumber();
 		dnb.formatNumber();
-		
+
 		int decicount = dna.getSizeRightOfPoint() + dnb.getSizeRightOfPoint();
 
 		boolean isSigned = false;
@@ -599,7 +600,6 @@ public class MultiplicationUtils {
 				answerTable.get(i).add(0, '0');
 			}
 		}
-		
 
 		// 4.) add answer table
 		DynamicNumber sum = new DynamicNumber("0");
@@ -610,30 +610,41 @@ public class MultiplicationUtils {
 		}
 
 		/* solution end non-negative integers */
-		
-		if(decicount > 0) {
-			sum.getNumber().add(sum.getNumber().size() - decicount, '.');
+
+		if (decicount > 0) {
+			int index = sum.getNumber().size() - decicount;
+			// inflate number with more zeros if index is less than zero
+			if (index < 0) {
+				index = -index;
+				for (int i = 0; i < index; i++) {
+					sum.getNumber().add(0, '0');
+				}
+				index = 0;
+			}
+			sum.getNumber().add(index, '.');
 		}
-		
+
 		if (isSigned) {
 			sum.getNumber().add(0, '-');
 		}
 
-		System.out.println("_________________________");
-		/// ------------ PRINT TABLE ------------
-		for (int i = 0; i < mathTable.length; i++) {
-			for (int j = 0; j < mathTable[i].length; j++) {
-				System.out.print(mathTable[i][j] + "-");
+		if (ScratchWork.getInstance().isLogging()) {
+			ScratchWork.getInstance().log("_________Math Table_________", true);
+			/// ------------ Add work to Debug ------------
+			for (int i = 0; i < mathTable.length; i++) {
+				for (int j = 0; j < mathTable[i].length; j++) {
+					ScratchWork.getInstance().log(mathTable[i][j] + "-", false);
+				}
+				ScratchWork.getInstance().log("", true);
 			}
-			System.out.println();
-		}
-		// ------------ PRINT TABLE ------------
-		System.out.println("_________________________");
-		for (int i = 0; i < answerTable.size(); i++) {
-			for (int j = answerTable.get(i).size() - 1; j > -1; j--) {
-				System.out.print(answerTable.get(i).get(j) + " ");
+			// ------------ Add work to Deug ------------
+			ScratchWork.getInstance().log("__________Answer Table_________", true);
+			for (int i = 0; i < answerTable.size(); i++) {
+				for (int j = answerTable.get(i).size() - 1; j > -1; j--) {
+					ScratchWork.getInstance().log(answerTable.get(i).get(j) + " ", false);
+				}
+				ScratchWork.getInstance().log("", true);
 			}
-			System.out.println();
 		}
 
 		return sum.getNumber();
