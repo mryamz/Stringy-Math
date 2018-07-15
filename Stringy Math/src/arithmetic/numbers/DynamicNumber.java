@@ -151,8 +151,7 @@ public final class DynamicNumber {
 			}
 		}
 
-		if (getNumber().size() > 1)
-			while (getNumber().get(0) == '0') {
+			while (getNumber().size() > 1 && getNumber().get(0) == '0') {
 				getNumber().remove(0);
 			}
 		calculateSizes();

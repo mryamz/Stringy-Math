@@ -8,6 +8,7 @@ import logical.utils.LogicalUtils;
 public class DivideUtils {
 
 	private static boolean isSigned;
+	private static int lengthBeforeDecimalInDividend = -1;
 
 	public static List<Character> divide(DynamicNumber dividend, DynamicNumber divisor, DynamicNumber iterations, StringBuilder solution) {
 
@@ -29,6 +30,20 @@ public class DivideUtils {
 			divisor.formatNumber();
 		}
 
+		if (lengthBeforeDecimalInDividend == -1)
+			lengthBeforeDecimalInDividend = dividend.getSizeLeftOfPoint();
+
+		if (divisor.getNumber().contains('.')) {
+			int lengthBeforeDecimalInDivisor = divisor.getSizeLeftOfPoint();
+			divisor.getNumber().remove(Character.valueOf('.'));
+			dividend.getNumber().remove(Character.valueOf('.'));
+
+			for (int i = dividend.getNumber().size(); i < lengthBeforeDecimalInDividend + lengthBeforeDecimalInDivisor; i++) {
+				dividend.getNumber().add('0');
+			}
+			dividend.getNumber().add(lengthBeforeDecimalInDividend + lengthBeforeDecimalInDivisor, '.');
+		}
+
 		dividend.getNumber().remove(Character.valueOf('-'));
 		divisor.getNumber().remove(Character.valueOf('-'));
 		dividend.getNumber().remove(Character.valueOf('.'));
@@ -47,17 +62,31 @@ public class DivideUtils {
 			solution.append(c);
 		}
 
-		if (LogicalUtils.getLogicalStatus(remainder, new DynamicNumber("0")) == "equal" || LogicalUtils.getLogicalStatus(iterations, new DynamicNumber("1000")) == "true") {
+		remainder.formatNumber();
+		System.out.println(remainder);
+		if (remainder.toString().equals("0") || LogicalUtils.getLogicalStatus(iterations, new DynamicNumber("1000")) == "true") {
 			DynamicNumber sol = new DynamicNumber(solution.toString());
-			
 			if (isSigned) {
 				sol.getNumber().add(0, '-');
 			}
+
+			for (int i = 0; i < lengthBeforeDecimalInDividend - 1; i++) {
+				sol.getNumber().add(0, '0');
+			}
+
+			if (lengthBeforeDecimalInDividend - 1 < 0) {
+				sol.getNumber().add(0, '.');
+			} else {
+				sol.getNumber().add(lengthBeforeDecimalInDividend - 1, '.');
+			}
+
+			sol.formatNumber();
 			return sol.getNumber();
 		} else {
 			intermittenStep.getNumber().add('0');
 			return divide(intermittenStep, divisor, iterations.add("1"), solution);
 		}
+
 	}
 
 	/**
